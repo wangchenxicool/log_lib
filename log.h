@@ -9,56 +9,53 @@
 #include <pthread.h>
 
 
-class Log
-{
+class Log {
 private:
-	enum 
-	{
-		DAY_SECONDS = 24 * 60 * 60	
-	};
+    enum {
+        DAY_SECONDS = 24 * 60 * 60
+    };
 
-	std::string name;
-	std::string path; 
-	
-	time_t next_time;  //下一次新建日志的时间
-	FILE* file;
+    std::string name;
+    std::string path;
 
-	bool using_mult_thread;
-	pthread_mutex_t mutex;
+    time_t next_time;
+    FILE* file;
+
+    bool using_mult_thread;
+    pthread_mutex_t mutex;
 
 private:
-	Log(const std::string& n, const std::string& p = ".", 
-			bool mult_thread = false);
-	~Log();
-	Log(const Log&);
-	Log operator=(const Log&);
-	
+    Log (const std::string& n, const std::string& p = ".",
+         bool mult_thread = false);
+    ~Log();
+    Log (const Log&);
+    Log operator= (const Log&);
+
 public:
-	static Log& create(const std::string& n, const std::string& p = ".", 
-			bool mult_thread = false);
+    static Log& create (const std::string& n, const std::string& p = ".",
+                        bool mult_thread = false);
 
-	bool need_open_new_file();
-	int open_new_file();
-	void release_file();
-	void update_next_time();
-	int print(const char* file_name, int line, 
-			const char* func, const char* fmt, ...);
+    bool need_open_new_file();
+    int open_new_file();
+    void release_file();
+    void update_next_time();
+    int print (const char* file_name, int line,
+               const char* func, const char* fmt, ...);
 
 private:
-	void get_year_month_day(std::string& res);
-	void get_hour_min_sec(std::string& res);	
+    void get_year_month_day (std::string& res);
+    void get_hour_min_sec (std::string& res);
 };
 
-class LogContainer
-{
-private:	
-	static Log* log;
-	static const std::string log_path;
-	static const bool using_mult_thread;
+class LogContainer {
+private:
+    static Log* log;
+    static const std::string log_path;
+    static const bool using_mult_thread;
 
 public:
-	static Log* get();
-	static Log* create(const char*);
+    static Log* get();
+    static Log* create (const char*);
 };
 
 
@@ -80,4 +77,3 @@ public:
 	} while(0)
 
 #endif
-	
